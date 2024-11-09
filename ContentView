@@ -1,0 +1,70 @@
+//
+//  ContentView.swift
+//  InteractiveMap
+
+import SwiftUI
+import MapKit
+
+extension CLLocationCoordinate2D {
+    static let library = CLLocationCoordinate2D(latitude: 42.39,longitude: -72.528)
+}
+
+extension MKCoordinateRegion {
+    static let amherst = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(
+            latitude: 42.340,
+            longitude: -72.528),
+        span: MKCoordinateSpan(
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1)
+    )
+    static let umass = MKCoordinateRegion(
+        center: CLLocationCoordinate2D(
+            latitude: 42.39,
+            longitude: -72.528),
+        span: MKCoordinateSpan(
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01)
+    )
+}
+
+
+struct ContentView: View {
+    @State private var position: MapCameraPosition = .automatic
+    @State private var searchResults: [MKMapItem] = []
+    var body: some View {
+        
+        Map(position:$position) {
+            Annotation("Library", coordinate: .library) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 5).fill(.background)
+                    RoundedRectangle(cornerRadius: 5).stroke(.secondary, lineWidth: 5)
+                    Image(systemName: "building.2").padding(5)
+                }
+            }.annotationTitles(.hidden)
+            
+            ForEach(searchResults, id: \.self) {
+                result in Marker(item: result)
+            }
+        }
+        .mapStyle(.hybrid(elevation: .realistic))
+        .safeAreaInset(edge: .bottom) {
+            HStack {
+                Spacer()
+                BeantownButtons(position: $position, searchResults: $searchResults)
+                    .padding(.top)
+                Spacer()
+            }
+            .background(.thinMaterial)
+        }
+        .onChange(of: searchResults) {
+            position = .automatic
+        }
+         
+        
+    }
+}
+
+#Preview {
+    ContentView()
+}
