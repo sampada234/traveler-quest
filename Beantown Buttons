@@ -1,0 +1,106 @@
+//
+//  BeantownButtons.swift - search buttons
+import SwiftUI
+import MapKit
+
+struct BeantownButtons: View {
+    
+    @Binding var position: MapCameraPosition
+    
+    @Binding var searchResults: [MKMapItem]
+    
+    
+    var body: some View {
+        HStack {
+            Button {
+                search(for: "dining commons")
+            } label: {
+                Label("Dining Commons", systemImage: "fork.knife")
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button {
+                search(for: "transportation")
+            } label: {
+                Label("Transportation", systemImage: "bus")
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button {
+                search(for: "gyms")
+            } label: {
+                Label("Gym", systemImage: "dumbbell.fill")
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button {
+                searchMultiple(for: ["Student Union", "W.E.B. Du Bois Library", "Murray D. Lincoln Campus Center", "University Health Services", "Recreation and Wellbeing - UMass"])
+            } label: {
+                Label("UMass Buildings", systemImage: "graduationcap")
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button {
+                position = .region(.umass)
+            } label: {
+                Label("Amherst", systemImage: "building.2")
+            }
+            .buttonStyle(.bordered)
+            
+            Button {
+                position = .region(.amherst)
+            } label: {
+                Label("UMass Amherst", systemImage: "water.wavesap(")
+            }
+            .buttonStyle(.bordered)
+        }
+        .labelStyle(.iconOnly)
+    }
+    
+    func search(for query: String) {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = query
+        request.resultTypes = .pointOfInterest
+        request.region = MKCoordinateRegion(
+            center: .library,
+            span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125))
+        
+        Task {
+            let search = MKLocalSearch(request: request)
+            let response = try? await search.start()
+            searchResults = response?.mapItems ?? []
+         }
+     }
+    
+    func searchMultiple(for queries: [String]) { // Modified function to accept an array of queries
+        var results: [MKMapItem] = [] // Temporary array to store all search results
+        
+        // Loop through each query and perform the search (highlighted change)
+        for query in queries {  // New loop added to handle multiple queries
+            let request = MKLocalSearch.Request()
+            request.naturalLanguageQuery = query
+            request.resultTypes = .pointOfInterest
+            request.region = MKCoordinateRegion(
+                center: .library, // Assuming this is the center point
+                span: MKCoordinateSpan(latitudeDelta: 0.0125, longitudeDelta: 0.0125)
+            )
+            
+            Task {
+                let search = MKLocalSearch(request: request)
+                do {
+                    let response = try await search.start()
+                    results.append(contentsOf: response.mapItems)  // Append the search results to `results`
+                    
+                    // Update the search results in the parent view (highlighted change)
+                    await MainActor.run {
+                        searchResults = results // Update the searchResults with all accumulated results
+                    }
+                } catch {
+                    print("Error searching for \(query): \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+
+}
