@@ -10,9 +10,12 @@ struct BeantownButtons: View {
     @Binding var searchResults: [MKMapItem]
     
     var visibleRegion: MKCoordinateRegion?
+    
+    @State var showSheet = false
         
     
     var body: some View {
+       
         HStack {
             Button {
                 search(for: "dining commons")
@@ -45,18 +48,20 @@ struct BeantownButtons: View {
             Button {
                 position = .region(.umass)
             } label: {
-                Label("Amherst", systemImage: "building")
+                Label("UMass", systemImage: "building")
             }
             .buttonStyle(.bordered)
             
             Button {
                 position = .region(.amherst)
             } label: {
-                Label("UMass Amherst", systemImage: "water.wavesap(")
+                Label("Amherst", systemImage: "")
             }
             .buttonStyle(.bordered)
+
         }
         .labelStyle(.iconOnly)
+    
     }
     
     func search(for query: String) {
