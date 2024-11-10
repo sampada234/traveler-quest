@@ -31,27 +31,35 @@ extension MKCoordinateRegion {
 
 struct ContentView: View {
     @State private var position: MapCameraPosition = .automatic
+    
+    @State private var visibleRegion: MKCoordinateRegion?
+    
     @State private var searchResults: [MKMapItem] = []
+    @State private var selectedResult: MKMapItem?
+    
+    @State var shouldPresentSheet = false
+    @Environment(\.dismiss) private var dismiss
+    
+    
     var body: some View {
-        
-        Map(position:$position) {
+        Map(position:$position, selection: $selectedResult) {
             Annotation("Library", coordinate: .library) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5).fill(.background)
                     RoundedRectangle(cornerRadius: 5).stroke(.secondary, lineWidth: 5)
-                    Image(systemName: "building.2").padding(5)
+                    Image(systemName: "building").padding(5)
                 }
             }.annotationTitles(.hidden)
             
-            ForEach(searchResults, id: \.self) {
-                result in Marker(item: result)
+            ForEach(searchResults, id: \.self) { result in
+                Marker(item: result)
             }
         }
         .mapStyle(.hybrid(elevation: .realistic))
         .safeAreaInset(edge: .bottom) {
             HStack {
                 Spacer()
-                BeantownButtons(position: $position, searchResults: $searchResults)
+                BeantownButtons(position: $position, searchResults: $searchResults, visibleRegion: visibleRegion)
                     .padding(.top)
                 Spacer()
             }
@@ -60,10 +68,33 @@ struct ContentView: View {
         .onChange(of: searchResults) {
             position = .automatic
         }
-         
+        .onMapCameraChange { context in
+            visibleRegion = context.region
+        }
         
+        VStack(alignment: .leading, spacing: -5) {
+                    Button("Present Sheet") {
+                        shouldPresentSheet.toggle()
+                    }
+                 
+                        .sheet(isPresented: $shouldPresentSheet) {
+                            print("Sheet dismissed!")
+                        } content: {
+                                Text("Player Statistics")
+                                    .font(.title)
+                                    .padding(.top, 20)
+                            Spacer()
+                            
+                        }
+          
+                    
+
+                }
+                    .padding()
+                    .frame(width: 400, height: 300)
     }
 }
+        
 
 #Preview {
     ContentView()
