@@ -67,7 +67,6 @@ struct ContentView: View {
                     Marker(item: result)
                 }
                 .annotationTitles(.hidden)
-                
                 UserAnnotation()
             }
             .mapStyle(.hybrid(elevation: .realistic))
@@ -77,8 +76,10 @@ struct ContentView: View {
                     BeantownButtons(position: $position, searchResults: $searchResults, visibleRegion: visibleRegion)
                         .padding(.top)
                     Spacer()
+                    
                 }
                 .background(.thinMaterial)
+                
             }
             .onChange(of: searchResults) {
                 position = .automatic
