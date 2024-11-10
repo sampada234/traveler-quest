@@ -9,3 +9,4 @@ Lastly, the developers would like to thank all contributions from people ranging
 Ryan: I am very happy that I could meet new people and create a product in a new language. Thank you everyone! 
 William: I enjoyed working on this team and designing this app. It was a fun and engaging learning experience. Thank you everyone!
 Sampada: I enjoyed being a part of this team and learning a new skill that I got to use to implement this really cool app. Thank you guys!
+Chris: It was my first hackan and it was a really good time with this team
