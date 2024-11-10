@@ -16,51 +16,55 @@ struct BeantownButtons: View {
     
     var body: some View {
        
-        HStack {
-            Button {
-                search(for: "dining commons")
-            } label: {
-                Label("Dining Commons", systemImage: "fork.knife")
+        VStack{
+            HStack {
+                Button {
+                    search(for: "dining commons")
+                } label: {
+                    Label("Dining Commons", systemImage: "fork.knife")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    search(for: "transportation")
+                } label: {
+                    Label("Transportation", systemImage: "bus")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    search(for: "gyms")
+                } label: {
+                    Label("Gym", systemImage: "dumbbell.fill")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    searchMultiple(for: ["Student Union", "W.E.B. Du Bois Library", "Murray D. Lincoln Campus Center", "University Health Services", "Recreation and Wellbeing - UMass"])
+                } label: {
+                    Label("UMass Buildings", systemImage: "graduationcap")
+                }
+                .buttonStyle(.borderedProminent)
+                
+                Button {
+                    position = .region(.umass)
+                } label: {
+                    Label("UMass", systemImage: "building")
+                }
+                .buttonStyle(.bordered)
+                
+                Button {
+                    position = .region(.amherst)
+                } label: {
+                    Label("Amherst", systemImage: "")
+                }
+                .buttonStyle(.bordered)
+                
             }
-            .buttonStyle(.borderedProminent)
-            
-            Button {
-                search(for: "transportation")
-            } label: {
-                Label("Transportation", systemImage: "bus")
-            }
-            .buttonStyle(.borderedProminent)
-            
-            Button {
-                search(for: "gyms")
-            } label: {
-                Label("Gym", systemImage: "dumbbell.fill")
-            }
-            .buttonStyle(.borderedProminent)
-            
-            Button {
-                searchMultiple(for: ["Student Union", "W.E.B. Du Bois Library", "Murray D. Lincoln Campus Center", "University Health Services", "Recreation and Wellbeing - UMass"])
-            } label: {
-                Label("UMass Buildings", systemImage: "graduationcap")
-            }
-            .buttonStyle(.borderedProminent)
-            
-            Button {
-                position = .region(.umass)
-            } label: {
-                Label("UMass", systemImage: "building")
-            }
-            .buttonStyle(.bordered)
-            
-            Button {
-                position = .region(.amherst)
-            } label: {
-                Label("Amherst", systemImage: "")
-            }
-            .buttonStyle(.bordered)
-
+            .labelStyle(.iconOnly)
         }
-        .labelStyle(.iconOnly)
+        
+        
     
     }
     
